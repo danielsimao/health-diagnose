@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { CaseModule } from './case/case.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
       `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@cluster0.3bb5f.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
     ),
     UserModule,
+    CaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
