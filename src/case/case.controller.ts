@@ -6,8 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CaseService } from './case.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
@@ -26,6 +28,7 @@ export class CaseController {
     return this.caseService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: Types.ObjectId) {
     return this.caseService.findOne(id);
