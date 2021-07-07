@@ -12,5 +12,6 @@ import { Diagnoses, DiagnosesSchema } from '../schemas/diagnoses.schema';
   ],
   controllers: [DiagnoseController],
   providers: [DiagnoseService],
+  exports: [DiagnoseService],
 })
 export class DiagnoseModule {}

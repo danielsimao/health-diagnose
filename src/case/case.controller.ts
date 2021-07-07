@@ -8,11 +8,12 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CaseService } from './case.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
+import { FindAllCasesDto } from './dto/find-all-cases.dto';
 
 @Controller('case')
 export class CaseController {
@@ -24,26 +25,32 @@ export class CaseController {
   }
 
   @Get()
-  findAll() {
+  findAll(
+    @Body()
+    findAllCaseDto: FindAllCasesDto,
+  ) {
+    if (findAllCaseDto.unreviewed) {
+      return this.caseService.findAllUnreviewedByUserId(findAllCaseDto.userId);
+    }
     return this.caseService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: Types.ObjectId) {
+  findOne(@Param('id') id: Schema.Types.ObjectId) {
     return this.caseService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: Types.ObjectId,
+    @Param('id') id: Schema.Types.ObjectId,
     @Body() updateCaseDto: UpdateCaseDto,
   ) {
     return this.caseService.update(id, updateCaseDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: Types.ObjectId) {
+  remove(@Param('id') id: Schema.Types.ObjectId) {
     return this.caseService.remove(id);
   }
 }
