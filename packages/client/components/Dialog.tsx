@@ -19,7 +19,7 @@ export default function Dialog({
   const contentWrapperClassName = fullscreen ? "p-0" : "px-4";
   const contentClassName = fullscreen
     ? "w-screen h-screen p-0"
-    : "w-full rounded-2xl max-w-md  my-8";
+    : "w-full rounded-2xl max-w-md my-8 p-6";
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -28,9 +28,16 @@ export default function Dialog({
         className={`fixed inset-0 z-10 overflow-y-auto`}
         onClose={onClose}
       >
-        <LDialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+        <LDialog.Overlay className={`fixed inset-0 bg-black opacity-30 `} />
 
         <div className={`min-h-screen text-center ${contentWrapperClassName}`}>
+          {/* This element is to trick the browser into centering the modal contents. */}
+          <span
+            className="inline-block h-screen align-middle"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -41,7 +48,7 @@ export default function Dialog({
             leaveTo="opacity-0 scale-95"
           >
             <div
-              className={`inline-block p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl ${contentClassName} ${className}`}
+              className={`inline-block overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl ${contentClassName} ${className}`}
             >
               {children}
             </div>
