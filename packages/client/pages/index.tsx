@@ -2,9 +2,11 @@ import { useTheme } from "@material-ui/core/styles";
 import { useState } from "react";
 import Dialog from "../components/Dialog";
 import Login from "../components/Login";
+import { useUser } from "../lib/hooks";
 
 export default function Home() {
   const [open, setIsOpen] = useState(false);
+  useUser({ redirectTo: "/cases", redirectIfFound: true });
 
   function closeModal() {
     setIsOpen(false);

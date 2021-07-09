@@ -23,19 +23,23 @@ export default function Container({
         <meta content={description} name="description" />
       </Head>
       <div className="page-header bg-white">
-        <a href="#">
-          <span className="sr-only">Workflow</span>
-          <img
-            className="h-8 w-auto sm:h-10"
-            src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
-          />
-        </a>
-        {user && (
-          <div>
-            <span>Logged in as: {user.name}</span> |
-            <a href="/api/logout">Log Out</a>
-          </div>
-        )}
+        <div className="flex flex-row justify-between items-center">
+          <a href="/">
+            <span className="sr-only">Workflow</span>
+            <img
+              className="h-8 w-auto sm:h-10"
+              src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
+            />
+          </a>
+          {user && (
+            <div className="flex flex-row gap-2">
+              <span>Welcome {user.name}</span>
+              <a className="text-blue-500" href="/api/logout">
+                Log Out
+              </a>
+            </div>
+          )}
+        </div>
       </div>
       {children}
     </div>

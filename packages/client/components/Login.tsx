@@ -1,12 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useUser } from "../lib/hooks";
 
 export default function Login() {
   const router = useRouter();
   const [form, setForm] = useState({ password: "", username: "" });
   const [errors, setErrors] = useState({ password: false, username: false });
-  useUser({ redirectTo: "/cases", redirectIfFound: true });
 
   async function handleSubmit(e: any) {
     e.preventDefault();
