@@ -1,5 +1,4 @@
 import Dialog from "../Dialog";
-
 interface ReadyDialogProps {
   isOpen: boolean;
   onClose: () => void;

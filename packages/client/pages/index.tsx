@@ -5,7 +5,6 @@ import Login from "../components/Login";
 
 export default function Home() {
   const [open, setIsOpen] = useState(false);
-  const theme = useTheme();
 
   function closeModal() {
     setIsOpen(false);

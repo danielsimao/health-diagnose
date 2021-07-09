@@ -1,14 +1,34 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { useUser } from "../lib/hooks";
 
 export default function Login() {
+  const router = useRouter();
   const [form, setForm] = useState({ password: "", username: "" });
   const [errors, setErrors] = useState({ password: false, username: false });
+  useUser({ redirectTo: "/cases", redirectIfFound: true });
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
 
     if (!form.password || !form.username) {
       setErrors({ password: !form.password, username: !form.username });
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.status === 200) {
+        router.push("/cases");
+      } else {
+        throw new Error(await res.text());
+      }
+    } catch (error) {
+      console.error("An unexpected error happened occurred:", error);
     }
   }
 
@@ -22,6 +42,7 @@ export default function Login() {
           Username
         </label>
         <input
+          required
           onChange={(e) => {
             setErrors((s) => ({ ...s, username: false }));
             setForm((s) => ({ ...s, username: e.target.value }));
@@ -46,6 +67,7 @@ export default function Login() {
           Password
         </label>
         <input
+          required
           onChange={(e) => {
             setErrors((s) => ({ ...s, password: false }));
             setForm((s) => ({ ...s, password: e.target.value }));

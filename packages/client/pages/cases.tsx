@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import ConditionsDialog from "../components/cases/ConditionsDialog";
 import ConditionsSection from "../components/cases/ConditionsSection";
 import ReadyDialog from "../components/cases/ReadyDialog";
 import Container from "../components/Container";
+import { useUser } from "../lib/hooks";
 
 const people = [
   "Wadeqwer Cooper",
@@ -26,15 +27,17 @@ const people = [
   "Helleqwerqwn Schmidt",
 ];
 export default function Cases() {
-  const [ready, setReady] = useState(false);
-  const [selected, setSelected] = useState(people[0]);
+  const user = useUser({ redirectTo: "/" });
+  const [ready, setReady] = useState(true);
   const [form, setForm] = useState<{
     condition: null | string;
     time: null | number;
   }>({ condition: null, time: null });
   const [step, setStep] = useState(0);
-  const [search, setSearch] = useState(form.condition || "");
-  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setReady(false);
+  }, []);
 
   function handleDiagnose() {
     if (form.condition) {
@@ -70,6 +73,10 @@ export default function Cases() {
             src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
           />
         </a>
+        <div>
+          <span>Logged in as: {user?.name}</span> |{" "}
+          <a href="/api/logout">Log Out</a>
+        </div>
       </div>
       <main className="page-main bg-gray-100 overflow-hidden">
         <div className="flex flex-row gap-5 text-left md:py-20">

@@ -7,6 +7,7 @@ interface DialogProps {
   children: React.ReactNode;
   className?: string;
   fullscreen?: boolean;
+  initialFocus?: any;
 }
 
 export default function Dialog({
@@ -15,6 +16,7 @@ export default function Dialog({
   children,
   className = "",
   fullscreen = false,
+  initialFocus,
 }: DialogProps) {
   const contentWrapperClassName = fullscreen ? "p-0" : "px-4";
   const contentClassName = fullscreen
@@ -27,9 +29,9 @@ export default function Dialog({
         as="div"
         className={`fixed inset-0 z-10 overflow-y-auto`}
         onClose={onClose}
+        initialFocus={initialFocus}
       >
         <LDialog.Overlay className={`fixed inset-0 bg-black opacity-30 `} />
-
         <div className={`min-h-screen text-center ${contentWrapperClassName}`}>
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
