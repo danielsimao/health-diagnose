@@ -1,15 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { Request } from 'express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { User } from '../schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
@@ -20,14 +25,13 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':username')
-  findOne(@Param('username') username: string) {
-    return this.userService.findOne(username);
+  async find(@Req() req: Request) {
+    const user = <User>req.user;
+    const userData = await this.userService.findOne(user.username);
+    userData.password = undefined;
+    return userData;
   }
 
   @Patch(':username')
