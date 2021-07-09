@@ -1,132 +1,149 @@
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useState } from "react";
+import useSWR from "swr";
 import Button from "../components/Button";
 import ConditionsDialog from "../components/cases/ConditionsDialog";
 import ConditionsSection from "../components/cases/ConditionsSection";
+import EHRSection from "../components/cases/EHRSection";
+import ProgressBar from "../components/cases/PorgressBar";
 import ReadyDialog from "../components/cases/ReadyDialog";
 import Container from "../components/Container";
+import fetcher from "../lib/fetcher";
 import { useUser } from "../lib/hooks";
 
-const people = [
-  "Wadeqwer Cooper",
-  "Arlene Mccoy",
-  "Devon Webb",
-  "Tom Cook",
-  "Tanqwerya Fox",
-  "Helqqwerlen Schmidt",
-  "Wade Cooper",
-  "Arlewqqwererwne Mccoy",
-  "Devonqwer qwerWebb",
-  "Tom rqwerCook",
-  "Tanywerqwera Fox",
-  "Hellenqwer Schmidt",
-  "Wade Crqwerooper",
-  "Arleneqwerqwe Mccoy",
-  "Devoweqrqwern Webb",
-  "Tom Cqwerook",
-  "Tanyqwqwerera Fox",
-  "Helleqwerqwn Schmidt",
-];
 export default function Cases() {
   const user = useUser({ redirectTo: "/" });
-  const [ready, setReady] = useState(true);
+  const { data } = useSWR("/api/cases", fetcher);
+  const [ready, setReady] = useState(false);
   const [form, setForm] = useState<{
-    condition: null | string;
-    time: null | number;
-  }>({ condition: null, time: null });
-  const [step, setStep] = useState(0);
+    condition: undefined | string;
+    startTime: undefined | number;
+  }>({ condition: undefined, startTime: undefined });
+  const [caseIdx, setCaseIdx] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    setReady(false);
-  }, []);
+  if (!data?.cases) {
+    return <Container className="relative h-screen bg-gray-100" />;
+  }
+
+  function handleReady() {
+    setForm((s) => ({ ...s, startTime: new Date().getTime() }));
+    setReady(true);
+  }
+
+  if (!ready) {
+    <Container className="relative h-screen bg-gray-100 filter blur-sm">
+      <ReadyDialog
+        isOpen={!ready}
+        onClose={handleReady}
+        onReady={handleReady}
+        numberOfCases={data?.cases.length}
+      />
+    </Container>;
+  }
+
+  if (!data.cases.length || data.cases.length < caseIdx + 1) {
+    return (
+      <Container className="relative h-screen bg-gray-100">
+        <div>
+          <Image
+            src="/static/success.png"
+            layout="fixed"
+            width="300"
+            height="250"
+          ></Image>
+          <div>
+            <span className="text-lg">
+              No more cases for now. Please comeback later!
+            </span>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
+  const currentCase = data.cases[caseIdx];
 
   function handleDiagnose() {
     if (form.condition) {
-      setStep(0);
+      setIsOpen(false);
     }
   }
 
   function handleSelect(condionOption: string) {
-    setForm({ condition: condionOption, time: null });
+    setForm((s) => ({ ...s, condition: condionOption }));
+  }
+
+  function handleSubmit() {
+    fetch("/api/diagnose", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        userId: user._id,
+        caseId: currentCase._id,
+        label: form.condition,
+        time: new Date().getTime() - (form.startTime as number),
+      }),
+    });
+    setForm(() => ({ condition: undefined, startTime: undefined }));
+    setCaseIdx((s) => s + 1);
   }
 
   return (
     <Container
-      className={`relative h-screen ${!ready ? "filter blur-sm" : ""}`}
+      className={`relative h-screen bg-gray-100  ${
+        !ready ? "filter blur-sm" : ""
+      }`}
     >
+      <ProgressBar
+        className="fixed top-0 left-0 w-full"
+        progress={(caseIdx * 100) / data.cases.length}
+      />
       <ReadyDialog
         isOpen={!ready}
-        onClose={() => setReady(true)}
-        onReady={() => setReady(true)}
+        onClose={handleReady}
+        onReady={handleReady}
+        numberOfCases={data?.cases.length}
       />
-      <ConditionsDialog
-        form={form}
-        isOpen={step === 1}
-        onClose={() => setStep(0)}
-        onSelect={handleSelect}
-        onSubmit={handleDiagnose}
-      />
-      <div className="page-header">
-        <a href="#">
-          <span className="sr-only">Workflow</span>
-          <img
-            className="h-8 w-auto sm:h-10"
-            src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
-          />
-        </a>
-        <div>
-          <span>Logged in as: {user?.name}</span> |{" "}
-          <a href="/api/logout">Log Out</a>
-        </div>
-      </div>
-      <main className="page-main bg-gray-100 overflow-hidden">
+
+      <main className="page-main overflow-hidden">
         <div className="flex flex-row gap-5 text-left md:py-20">
-          <div className="flex-1">
-            <div
-              id="ehr"
-              className="bg-white shadow overflow-hidden rounded-lg"
-            >
-              <div className="px-4 py-5 sm:px-6">
-                <h2 className="text-lg leading-6 font-bold text-gray-900">
-                  Health Record #11
-                </h2>
-              </div>
-              <div className="border-t border-gray-200">
-                <div className="bg-gray-50 p-5">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
-              </div>
-              <div className="border-t border-gray-200 p-5">
-                Condition: UKNOWN
-              </div>
-            </div>
-          </div>
+          <EHRSection
+            condition={form.condition}
+            record={data.cases[caseIdx]?.ehr}
+            recordNum={caseIdx + 1}
+            totalRecords={data.cases.length}
+          />
           <ConditionsSection
-            form={form}
-            isOpen={step === 1}
-            onClose={() => setStep(0)}
+            condition={form.condition}
             onSelect={handleSelect}
-            onSubmit={handleDiagnose}
-          ></ConditionsSection>
+            onSubmit={handleSubmit}
+          />
         </div>
       </main>
-      <div className="fixed grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden">
+      <div
+        className={`fixed grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden ${
+          !data.cases.length ? "hidden" : ""
+        }`}
+      >
+        <ConditionsDialog
+          condition={form.condition}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onSelect={handleSelect}
+          onSubmit={handleDiagnose}
+        />
         <Button
-          onClick={() => setStep(1)}
+          onClick={() => setIsOpen(true)}
           className="col-span-2"
           variant="primary"
         >
           Diagnose
         </Button>
         <Button
+          onClick={handleSubmit}
           disable={!form.condition}
           className="col-span-1 "
           variant="white"

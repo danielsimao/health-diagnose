@@ -3,20 +3,21 @@ interface ReadyDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onReady: () => void;
+  numberOfCases: number;
 }
 
 export default function ReadyDialog({
   isOpen,
   onClose,
   onReady,
+  numberOfCases,
 }: ReadyDialogProps) {
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-5">
         <span className="text-lg leading-6 font-bold text-gray-900">
-          You have 5 cases to diagnose.
+          You have {numberOfCases} cases to diagnose.
         </span>
-
         <button
           onClick={onReady}
           type="button"

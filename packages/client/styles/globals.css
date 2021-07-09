@@ -66,3 +66,7 @@ a {
 .page-footer {
   grid-column: 1 / -1;
 }
+
+.progress-bar .MuiLinearProgress-bar1Determinate {
+  background-color: rgba(59, 130, 246);
+}
