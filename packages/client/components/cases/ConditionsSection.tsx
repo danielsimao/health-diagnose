@@ -1,4 +1,4 @@
-import { HTMLAttributes, useRef, useState } from "react";
+import { HTMLAttributes, useEffect, useRef, useState } from "react";
 import Button from "../Button";
 
 interface ConditionsSectionProps {
@@ -7,7 +7,7 @@ interface ConditionsSectionProps {
   onSelect: (condition: string) => void;
   onSubmit: () => void;
   form: any;
-  style: HTMLAttributes<HTMLDivElement>["style"];
+  style?: HTMLAttributes<HTMLDivElement>["style"];
 }
 
 const people = [
@@ -38,6 +38,18 @@ export default function ConditionsSection({
   style,
 }: ConditionsSectionProps) {
   const [search, setSearch] = useState(form.condition || "");
+  const ref = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const condition = document.querySelector("#ehr");
+    if (ref.current && ref2.current && condition) {
+      const height = condition.scrollHeight;
+
+      ref.current.style.height = `${height}px`;
+      ref2.current.style.height = `${height - 65 - 64}px`;
+    }
+  }, []);
 
   function handleSelect(option: string) {
     onSelect(option);
@@ -58,6 +70,7 @@ export default function ConditionsSection({
 
   return (
     <div
+      ref={ref}
       style={style}
       className="hidden md:block md:flex-1 md:overflow-hidden bg-white shadow rounded-lg"
     >
@@ -68,10 +81,7 @@ export default function ConditionsSection({
             className="appearance-none rounded w-full h-12 text-gray-700 leading-tight focus:outline-none"
           ></input>
         </div>
-        <div
-          style={{ height: (style?.height as any) - 65 - 64 }}
-          className="flex flex-col overflow-y-auto"
-        >
+        <div ref={ref2} className="flex flex-col overflow-y-auto">
           {options}
         </div>
         <div className="p-2 border-t border-gray-200">

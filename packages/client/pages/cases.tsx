@@ -1,13 +1,9 @@
-import { Fragment, useRef, useState } from "react";
-import Container from "../components/Container";
-import { Listbox, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/solid";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import Dialog from "../components/Dialog";
+import { useRef, useState } from "react";
 import Button from "../components/Button";
-import ReadyDialog from "../components/cases/ReadyDialog";
 import ConditionsDialog from "../components/cases/ConditionsDialog";
 import ConditionsSection from "../components/cases/ConditionsSection";
+import ReadyDialog from "../components/cases/ReadyDialog";
+import Container from "../components/Container";
 
 const people = [
   "Wadeqwer Cooper",
@@ -79,7 +75,7 @@ export default function Cases() {
         <div className="flex flex-row gap-5 text-left md:py-20">
           <div className="flex-1">
             <div
-              ref={ref}
+              id="ehr"
               className="bg-white shadow overflow-hidden rounded-lg"
             >
               <div className="px-4 py-5 sm:px-6">
@@ -107,7 +103,6 @@ export default function Cases() {
             </div>
           </div>
           <ConditionsSection
-            style={{ height: (ref.current as any)?.scrollHeight as number }}
             form={form}
             isOpen={step === 1}
             onClose={() => setStep(0)}
