@@ -17,7 +17,7 @@ export class DiagnoseService {
   }
 
   findAll(userId?: Schema.Types.ObjectId) {
-    return this.diagnosesModel.find({ userId }).exec();
+    return this.diagnosesModel.find(userId && { userId });
   }
 
   findOne(id: number) {

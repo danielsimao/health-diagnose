@@ -1,19 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Schema } from 'mongoose';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { User } from '../schemas/user.schema';
 import { CaseService } from './case.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
-import { FindAllCasesDto } from './dto/find-all-cases.dto';
 
 @Controller('case')
 export class CaseController {
@@ -24,15 +25,11 @@ export class CaseController {
     return this.caseService.create(createCaseDto);
   }
 
-  @Get()
-  findAll(
-    @Body()
-    findAllCaseDto: FindAllCasesDto,
-  ) {
-    if (findAllCaseDto.unreviewed) {
-      return this.caseService.findAllUnreviewedByUserId(findAllCaseDto.userId);
-    }
-    return this.caseService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Get('/unreviewed')
+  findAllUnreviewed(@Req() req) {
+    const user = req.user;
+    return this.caseService.findAllUnreviewed(user.userId);
   }
 
   @UseGuards(JwtAuthGuard)

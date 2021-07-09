@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MSchema } from 'mongoose';
-import { Case } from './case.schema';
-import { User } from './user.schema';
 
 export type DiagnosesDocument = Diagnoses & Document;
 

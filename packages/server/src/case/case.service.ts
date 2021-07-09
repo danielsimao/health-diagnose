@@ -5,6 +5,10 @@ import { DiagnoseService } from '../diagnose/diagnose.service';
 import { Case, CaseDocument } from '../schemas/case.schema';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
+
+const lorem =
+  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
 @Injectable()
 export class CaseService {
@@ -13,7 +17,11 @@ export class CaseService {
     private diagnoseService: DiagnoseService,
   ) {}
 
-  async create(createCaseDto: CreateCaseDto): Promise<Case> {
+  // @Cron(CronExpression.EVERY_10_MINUTES, {
+  //   name: 'notifications',
+  //   timeZone: 'Europe/Lisbon',
+  // })
+  async create(createCaseDto: CreateCaseDto = { ehr: lorem }): Promise<Case> {
     return new this.caseModel(createCaseDto).save();
   }
 
@@ -33,7 +41,7 @@ export class CaseService {
     return this.caseModel.deleteOne({ id });
   }
 
-  async findAllUnreviewedByUserId(userId: Schema.Types.ObjectId) {
+  async findAllUnreviewed(userId: Schema.Types.ObjectId) {
     const diagnoses = await this.diagnoseService.findAll(userId);
 
     const reviewedCaseIds = diagnoses.map((diagnose) => diagnose.caseId);
