@@ -4,26 +4,27 @@
   "description": "Ease doctor's medical diagnose",
   "main": "index.js",
   "scripts": {
-    "test": "lerna run test:echo",
-    "start:dev": "lerna exec --scope=server -- npm run start:dev & lerna exec --scope=client -- npm run start:dev",
     "start": "lerna exec --scope=server -- npm run start & lerna exec --scope=client -- npm run start",
-    "build": "lerna run build",
-    "new-version": "lerna version --conventional-commits --yes",
+    "start:dev": "lerna exec --scope=server -- npm run start:dev & lerna exec --scope=client -- npm run start:dev",
+    "start:prod": "lerna exec --scope=server -- npm run start:prod & lerna exec --scope=client -- npm run start:prod",
+    "build": "lerna exec --scope=server -- npm run build & lerna exec --scope=client -- npm run build",
     "diff": "lerna diff",
     "postinstall": "npm run bootstrap",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap && npm run build",
+    "clean": "lerna clean -y",
+    "test": "lerna run test:echo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielsimao/health-review-api.git"
+    "url": "git+https://github.com/danielsimao/health-diagnose.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danielsimao/health-review-api/issues"
+    "url": "https://github.com/danielsimao/health-diagnose/issues"
   },
-  "homepage": "https://github.com/danielsimao/health-review-api#readme",
+  "homepage": "https://github.com/danielsimao/health-diagnose#readme",
   "devDependencies": {
     "lerna": "^4.0.0"
   }
