@@ -1,97 +1,138 @@
 import { useTheme } from "@material-ui/core/styles";
 import { useState } from "react";
+import Button from "../components/Button";
+import Container from "../components/Container";
 import Dialog from "../components/Dialog";
 import Login from "../components/Login";
+import SingUp from "../components/SignUp";
 import { useUser } from "../lib/hooks";
 
 export default function Home() {
-  const [open, setIsOpen] = useState(false);
+  const [method, setMethod] = useState<"login" | "signup">();
+  const [isOpen, setIsOpen] = useState(false);
   useUser({ redirectTo: "/cases", redirectIfFound: true });
 
-  function closeModal() {
-    setIsOpen(false);
+  function handleSignIn() {
+    setMethod("login");
+    setIsOpen(true);
   }
 
-  function openModal() {
+  function handleSignUp() {
+    setMethod("signup");
     setIsOpen(true);
   }
 
   return (
-    <div className="relative bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-          <svg
-            className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
-            fill="currentColor"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            aria-hidden="true"
+    <Container
+      onSignIn={handleSignIn}
+      onSignUp={handleSignUp}
+      className="relative"
+    >
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        {method === "login" && (
+          <Login
+            onLogin={() => setIsOpen(false)}
+            onClickChangeMethod={handleSignUp}
+          />
+        )}
+        {method === "signup" && <SingUp onClickChangeMethod={handleSignIn} />}
+      </Dialog>
+
+      <div className="pattern h-80 w-56 absolute top-20 right-10 hidden md:block" />
+      <div className="pattern h-56 w-56 absolute top-80 left-10 hidden md:block" />
+      <div className="page-main z-10 mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+        <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+          <span className="block xl:inline">Diagnose. Submit.</span>{" "}
+          <span className="block text-blue-500 xl:inline">Contribute.</span>
+        </h1>
+        <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl">
+          As technology becomes more advance, we must apply these advantages in
+          our health systems. Your knowledge is the key for a prosper and more
+          advanced future.
+        </p>
+        <div className="mt-5 sm:mt-8 flex flex-col sm:flex-row sm:justify-center gap-4">
+          <Button
+            onClick={handleSignIn}
+            className="px-10 py-4 text-base font-medium w-full md:w-auto"
+            variant="primary"
           >
-            <polygon points="50,0 100,0 50,100 0,100" />
-          </svg>
+            Get started
+          </Button>
+          <Button
+            onClick={() => window?.open("http://gyant.com")}
+            className="px-10 py-4 text-base font-medium w-full md:w-auto bg-blue-100"
+            variant="ghost"
+          >
+            Contact us
+          </Button>
+        </div>
 
-          <div className="pt-6 px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center justify-between sm:h-10">
-              <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
-                <div className="flex items-center justify-between w-full md:w-auto">
-                  <a href="#">
-                    <span className="sr-only">Workflow</span>
-                    <img
-                      className="h-8 w-auto sm:h-10"
-                      src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
-                    />
-                  </a>
-                  <div className="-mr-2 flex items-center md:hidden"></div>
-                </div>
-              </div>
-              <div className="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Log in
-                </a>
-              </div>
-            </nav>
-          </div>
-
-          <Dialog isOpen={open} onClose={closeModal}>
-            <Login />
-          </Dialog>
-
-          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-            <div className="sm:text-center lg:text-left">
-              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">
-                  Review. Submit. Contribute.
-                </span>{" "}
-              </h1>
-              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-                lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-                fugiat aliqua.
-              </p>
-              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                <div className="rounded-md shadow">
-                  <button
-                    onClick={openModal}
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                  >
-                    Get started
-                  </button>
-                </div>
-              </div>
+        <div className="mx-16 mt-20 flex flex-col sm:flex-row justify-center items-center gap-4">
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="text-blue-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                />
+              </svg>
             </div>
-          </main>
+            <p className="text-base sm:text-lg text-gray-800">
+              Review and Diagnose our medical cases
+            </p>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="text-blue-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                />
+              </svg>
+            </div>
+            <p className="text-base sm:text-lg text-gray-800">
+              Submit your diagnose along with thousands of professionals
+            </p>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="text-blue-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <p className="text-base sm:text-lg text-gray-800">
+              Contribute for a better and prosper future
+            </p>
+          </div>
         </div>
       </div>
-      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img
-          className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-          src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"
-          alt=""
-        />
-      </div>
-    </div>
+    </Container>
   );
 }

@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 
 interface ButtonProps {
-  variant: "primary" | "white";
+  variant: "primary" | "white" | "ghost";
   className?: string;
   disable?: boolean;
   onClick?: () => void;
@@ -16,6 +16,9 @@ const PRIMARY_CLASSNAME = "bg-blue-500 hover:bg-blue-600 text-gray-200";
 const WHITE_CLASSNAME =
   "bg-white border border-blue-500 hover:border-blue-600 text-blue-500";
 
+const GHOST_CLASSNAME =
+  "bg-white hover:border-blue-600 hover:bg-gray-100 text-blue-500";
+
 const DEFAULT_CLASSNAME =
   "px-4 py-3 rounded font-semibold transition duration-200 each-in-out";
 
@@ -28,7 +31,11 @@ export default function Button({
   type,
 }: ButtonProps) {
   const btnClassName = `${
-    variant === "white" ? WHITE_CLASSNAME : PRIMARY_CLASSNAME
+    variant === "white"
+      ? WHITE_CLASSNAME
+      : variant === "ghost"
+      ? GHOST_CLASSNAME
+      : PRIMARY_CLASSNAME
   } ${disable ? DISABLE_CLASSNAME : ""} ${className}`;
 
   return (

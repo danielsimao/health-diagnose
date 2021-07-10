@@ -38,11 +38,12 @@ export default function Cases() {
       <Container className="relative h-screen bg-gray-100">
         <div>
           <Image
+            alt="success"
             src="/static/success.png"
             layout="fixed"
             width="300"
             height="250"
-          ></Image>
+          />
           <div>
             <span className="text-lg">
               No more cases for now. Please comeback later!

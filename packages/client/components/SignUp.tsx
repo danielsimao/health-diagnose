@@ -1,15 +1,12 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
 import Form from "./Form";
 
-export default function Login({
+export default function SingUp({
   onClickChangeMethod,
 }: {
   onClickChangeMethod: () => void;
-  onLogin: () => void;
 }) {
   const [errorMsg, setErrorMsg] = useState("");
-  const router = useRouter();
 
   async function handleSubmit(e: any) {
     e.preventDefault();
@@ -17,20 +14,21 @@ export default function Login({
     const body = {
       username: e.currentTarget.username.value,
       password: e.currentTarget.password.value,
+      name: e.currentTarget._name.value,
     };
 
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
       if (res.status === 200) {
-        router.push("/cases");
+        onClickChangeMethod();
       } else {
         const error = await res.text();
         setErrorMsg(error);
-        throw new Error(await res.text());
+        throw new Error(error);
       }
     } catch (error) {
       console.error("An unexpected error happened occurred:", error);
@@ -39,10 +37,9 @@ export default function Login({
 
   return (
     <Form
-      isLogin
+      errorMessage={errorMsg}
       onClickChangeMethod={onClickChangeMethod}
       onSubmit={handleSubmit}
-      errorMessage={errorMsg}
     />
   );
 }

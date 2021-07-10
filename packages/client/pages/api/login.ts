@@ -9,7 +9,11 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
       body: JSON.stringify(req.body),
     });
 
-    const { access_token } = await login.json();
+    const { access_token, message } = await login.json();
+
+    if (!access_token) {
+      return res.status(401).send("Wrong credentials");
+    }
 
     await setLoginSession(res, { access_token });
 
