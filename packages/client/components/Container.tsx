@@ -44,7 +44,7 @@ export default function Container({
           />
           {user && (
             <div className="flex flex-row items-center gap-2">
-              <div className="text-gray-800 border-r border-black pr-6">
+              <div className="text-gray-800 border-r border-gray pr-6">
                 Welcome <span className="font-semibold">{user.name}</span>
               </div>
               <Link passHref href="/api/logout">
