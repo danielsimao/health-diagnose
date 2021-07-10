@@ -56,7 +56,7 @@ export default function ConditionsSection({
             onClear={onClear}
           />
         </div>
-        <div ref={ref2} className="flex flex-col overflow-y-auto">
+        <div ref={ref2} className="flex flex-col overflow-y-auto h-10">
           <ConditionsList onSelect={handleSelect} filter={search} />
         </div>
         <div className="flex items-center p-4 border-t border-gray-200">

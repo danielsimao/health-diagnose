@@ -10,7 +10,7 @@ export default function ConditionsList({
   onSelect,
 }: ConditionsListProps) {
   return (
-    <div className="overflow-auto flex-auto">
+    <div className="overflow-auto flex-auto bg-gray-50">
       {Conditions.filter((condition) =>
         `${condition.ICD_10} ${condition.ICD_10_Description}`
           .toLowerCase()
