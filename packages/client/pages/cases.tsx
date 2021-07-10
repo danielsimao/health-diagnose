@@ -64,17 +64,16 @@ export default function Cases() {
 
   const currentCase = data.cases[caseIdx];
 
-  function handleDiagnose() {
-    if (form.condition) {
-      setIsOpen(false);
-    }
-  }
-
   function handleSelect(condionOption: string) {
     setForm((s) => ({ ...s, condition: condionOption }));
+    setIsOpen(false);
   }
 
   function handleSubmit() {
+    if (!form.condition) {
+      return;
+    }
+
     fetch("/api/diagnose", {
       headers: {
         "Content-Type": "application/json",
@@ -90,6 +89,47 @@ export default function Cases() {
     setForm(() => ({ condition: undefined, startTime: undefined }));
     setCaseIdx((s) => s + 1);
   }
+
+  function handleClear() {
+    setForm((s) => ({ ...s, condition: undefined }));
+  }
+
+  function handleClose() {
+    setIsOpen(false);
+  }
+
+  function handleOpen() {
+    setIsOpen(true);
+  }
+
+  const mobileFeatures = (
+    <>
+      <ConditionsDialog
+        condition={form.condition}
+        isOpen={isOpen}
+        onClose={handleClose}
+        onClear={handleClear}
+        onSelect={handleSelect}
+      />
+      <div
+        className={`fixed grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden ${
+          !data.cases.length ? "hidden" : ""
+        }`}
+      >
+        <Button onClick={handleOpen} className="col-span-2" variant="primary">
+          Diagnose
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          disable={!form.condition}
+          className="col-span-1 "
+          variant="white"
+        >
+          Next
+        </Button>
+      </div>
+    </>
+  );
 
   return (
     <Container
@@ -120,37 +160,11 @@ export default function Cases() {
             condition={form.condition}
             onSelect={handleSelect}
             onSubmit={handleSubmit}
+            onClear={handleClear}
           />
         </div>
       </main>
-      <div
-        className={`fixed grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden ${
-          !data.cases.length ? "hidden" : ""
-        }`}
-      >
-        <ConditionsDialog
-          condition={form.condition}
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          onSelect={handleSelect}
-          onSubmit={handleDiagnose}
-        />
-        <Button
-          onClick={() => setIsOpen(true)}
-          className="col-span-2"
-          variant="primary"
-        >
-          Diagnose
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          disable={!form.condition}
-          className="col-span-1 "
-          variant="white"
-        >
-          Next
-        </Button>
-      </div>
+      {mobileFeatures}
     </Container>
   );
 }
