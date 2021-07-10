@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useState } from "react";
-import useSWR from "swr";
 import Button from "../components/Button";
 import ConditionsDialog from "../components/cases/ConditionsDialog";
 import ConditionsSection from "../components/cases/ConditionsSection";
@@ -8,41 +7,33 @@ import EHRSection from "../components/cases/EHRSection";
 import ProgressBar from "../components/cases/PorgressBar";
 import ReadyDialog from "../components/cases/ReadyDialog";
 import Container from "../components/Container";
-import fetcher from "../lib/fetcher";
-import { useUser } from "../lib/hooks";
+import { useCases, useUser } from "../lib/hooks";
+
+interface DiagnoseForm {
+  condition?: string;
+  startTime?: number;
+}
 
 export default function Cases() {
   const user = useUser({ redirectTo: "/" });
-  const { data } = useSWR("/api/cases", fetcher);
-  const [ready, setReady] = useState(false);
-  const [form, setForm] = useState<{
-    condition: undefined | string;
-    startTime: undefined | number;
-  }>({ condition: undefined, startTime: undefined });
-  const [caseIdx, setCaseIdx] = useState(0);
+  const { cases, isEmpty, isError, isLoading } = useCases();
+
+  const [form, setForm] = useState<DiagnoseForm>({
+    condition: undefined,
+    startTime: undefined,
+  });
+
+  const [currentCase, setCurrentCase] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!data?.cases) {
+  const numberOfCases = cases?.length;
+  const caseNumber = currentCase + 1;
+
+  if (isLoading) {
     return <Container className="relative h-screen bg-gray-100" />;
   }
 
-  function handleReady() {
-    setForm((s) => ({ ...s, startTime: new Date().getTime() }));
-    setReady(true);
-  }
-
-  if (!ready) {
-    <Container className="relative h-screen bg-gray-100 filter blur-sm">
-      <ReadyDialog
-        isOpen={!ready}
-        onClose={handleReady}
-        onReady={handleReady}
-        numberOfCases={data?.cases.length}
-      />
-    </Container>;
-  }
-
-  if (!data.cases.length || data.cases.length < caseIdx + 1) {
+  if (isEmpty || isError || caseNumber > numberOfCases) {
     return (
       <Container className="relative h-screen bg-gray-100">
         <div>
@@ -62,7 +53,12 @@ export default function Cases() {
     );
   }
 
-  const currentCase = data.cases[caseIdx];
+  // For some reason you cannot use `case`
+  const _case = cases[currentCase];
+
+  function handleReady() {
+    setForm(() => ({ condition: undefined, startTime: new Date().getTime() }));
+  }
 
   function handleSelect(condionOption: string) {
     setForm((s) => ({ ...s, condition: condionOption }));
@@ -70,9 +66,10 @@ export default function Cases() {
   }
 
   function handleSubmit() {
-    if (!form.condition) {
-      return;
-    }
+    if (!form.condition || !form.startTime) return;
+
+    const { condition, startTime } = form;
+    const finishTime = new Date().getTime();
 
     fetch("/api/diagnose", {
       headers: {
@@ -81,13 +78,15 @@ export default function Cases() {
       method: "POST",
       body: JSON.stringify({
         userId: user._id,
-        caseId: currentCase._id,
-        label: form.condition,
-        time: new Date().getTime() - (form.startTime as number),
+        caseId: _case._id,
+        label: condition,
+        duration: finishTime - startTime,
       }),
     });
-    setForm(() => ({ condition: undefined, startTime: undefined }));
-    setCaseIdx((s) => s + 1);
+
+    handleReady();
+
+    setCurrentCase((s) => s + 1);
   }
 
   function handleClear() {
@@ -111,11 +110,7 @@ export default function Cases() {
         onClear={handleClear}
         onSelect={handleSelect}
       />
-      <div
-        className={`fixed grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden ${
-          !data.cases.length ? "hidden" : ""
-        }`}
-      >
+      <div className="fixed grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden">
         <Button onClick={handleOpen} className="col-span-2" variant="primary">
           Diagnose
         </Button>
@@ -134,27 +129,27 @@ export default function Cases() {
   return (
     <Container
       className={`relative h-screen bg-gray-100  ${
-        !ready ? "filter blur-sm" : ""
+        !form.startTime ? "filter blur-sm" : ""
       }`}
     >
       <ProgressBar
         className="fixed top-0 left-0 w-full"
-        progress={(caseIdx * 100) / data.cases.length}
+        progress={(currentCase * 100) / numberOfCases}
       />
       <ReadyDialog
-        isOpen={!ready}
+        isOpen={!form.startTime}
         onClose={handleReady}
         onReady={handleReady}
-        numberOfCases={data?.cases.length}
+        numberOfCases={numberOfCases}
       />
 
       <main className="page-main overflow-hidden">
         <div className="flex flex-row gap-5 text-left md:py-20">
           <EHRSection
             condition={form.condition}
-            record={data.cases[caseIdx]?.ehr}
-            recordNum={caseIdx + 1}
-            totalRecords={data.cases.length}
+            record={_case.ehr}
+            caseNumber={caseNumber}
+            totalCases={numberOfCases}
           />
           <ConditionsSection
             condition={form.condition}

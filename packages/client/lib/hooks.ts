@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
+import Fetcher from "./fetcher";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -31,4 +32,15 @@ export function useUser({
   }, [redirectTo, redirectIfFound, finished, hasUser]);
 
   return error ? null : user;
+}
+
+export function useCases() {
+  const { data, error } = useSWR("/api/cases", Fetcher);
+
+  return {
+    cases: data,
+    isEmpty: !data?.length,
+    isLoading: !error && !data,
+    isError: error,
+  };
 }

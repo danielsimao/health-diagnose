@@ -1,12 +1,12 @@
 export default function EHRSection({
   condition = "UNKNOWN",
   record,
-  recordNum,
-  totalRecords,
+  caseNumber,
+  totalCases,
 }: {
-  recordNum: number;
+  caseNumber: number;
   record: string;
-  totalRecords: number;
+  totalCases: number;
   condition?: string;
 }) {
   return (
@@ -17,7 +17,7 @@ export default function EHRSection({
     >
       <div className="px-4 py-5 sm:px-6">
         <h2 className="text-lg leading-6 font-bold text-gray-900">
-          Health Record No. {recordNum} / {totalRecords}
+          Health Record No. {caseNumber} / {totalCases}
         </h2>
       </div>
       <div className="flex-auto border-t border-gray-200">

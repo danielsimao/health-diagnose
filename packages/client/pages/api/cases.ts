@@ -17,7 +17,7 @@ export default async function cases(req: NextApiRequest, res: NextApiResponse) {
       cases = await login.json();
     }
 
-    res.status(200).json({ cases });
+    res.status(200).json(cases);
   } catch (error) {
     console.error(error);
     res.status(500).end("Authentication token is invalid, please log in");
