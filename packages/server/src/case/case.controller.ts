@@ -11,17 +11,15 @@ import {
 } from '@nestjs/common';
 import { Schema } from 'mongoose';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { User } from '../schemas/user.schema';
+import { Case } from '../schemas/case.schema';
 import { CaseService } from './case.service';
-import { CreateCaseDto } from './dto/create-case.dto';
-import { UpdateCaseDto } from './dto/update-case.dto';
 
 @Controller('case')
 export class CaseController {
   constructor(private readonly caseService: CaseService) {}
 
   @Post()
-  create(@Body() createCaseDto: CreateCaseDto) {
+  create(@Body() createCaseDto: Case) {
     return this.caseService.create(createCaseDto);
   }
 
@@ -39,10 +37,7 @@ export class CaseController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: Schema.Types.ObjectId,
-    @Body() updateCaseDto: UpdateCaseDto,
-  ) {
+  update(@Param('id') id: Schema.Types.ObjectId, @Body() updateCaseDto: Case) {
     return this.caseService.update(id, updateCaseDto);
   }
 

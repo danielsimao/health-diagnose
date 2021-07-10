@@ -12,8 +12,6 @@ import {
 import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User } from '../schemas/user.schema';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 
@@ -40,10 +38,7 @@ export class UserController {
   }
 
   @Patch(':username')
-  update(
-    @Param('username') username: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  update(@Param('username') username: string, @Body() updateUserDto: User) {
     return this.userService.update(username, updateUserDto);
   }
 

@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
 import { Diagnoses, DiagnosesDocument } from '../schemas/diagnoses.schema';
-import { CreateDiagnoseDto } from './dto/create-diagnose.dto';
-import { UpdateDiagnoseDto } from './dto/update-diagnose.dto';
 
 @Injectable()
 export class DiagnoseService {
@@ -12,7 +10,7 @@ export class DiagnoseService {
     private diagnosesModel: Model<DiagnosesDocument>,
   ) {}
 
-  async create(createDiagnoseDto: CreateDiagnoseDto): Promise<Diagnoses> {
+  async create(createDiagnoseDto: Diagnoses): Promise<Diagnoses> {
     return new this.diagnosesModel(createDiagnoseDto).save();
   }
 
@@ -24,7 +22,7 @@ export class DiagnoseService {
     return this.diagnosesModel.findById(id);
   }
 
-  update(id: number, updateDiagnoseDto: UpdateDiagnoseDto) {
+  update(id: number, updateDiagnoseDto: Diagnoses) {
     return this.diagnosesModel.updateOne(
       { id },
       { $set: { ...updateDiagnoseDto } },

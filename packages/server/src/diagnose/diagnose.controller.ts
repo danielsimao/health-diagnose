@@ -1,14 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { Diagnoses } from '../schemas/diagnoses.schema';
 import { DiagnoseService } from './diagnose.service';
-import { CreateDiagnoseDto } from './dto/create-diagnose.dto';
-import { UpdateDiagnoseDto } from './dto/update-diagnose.dto';
 
 @Controller('diagnose')
 export class DiagnoseController {
   constructor(private readonly diagnoseService: DiagnoseService) {}
 
   @Post()
-  create(@Body() createDiagnoseDto: CreateDiagnoseDto) {
+  create(@Body() createDiagnoseDto: Diagnoses) {
     return this.diagnoseService.create(createDiagnoseDto);
   }
 
@@ -23,7 +30,7 @@ export class DiagnoseController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDiagnoseDto: UpdateDiagnoseDto) {
+  update(@Param('id') id: string, @Body() updateDiagnoseDto: Diagnoses) {
     return this.diagnoseService.update(+id, updateDiagnoseDto);
   }
 
