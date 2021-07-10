@@ -15,14 +15,19 @@ import { User } from '../schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: User) {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
+    return this.userService.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
   }
 
   @UseGuards(JwtAuthGuard)
