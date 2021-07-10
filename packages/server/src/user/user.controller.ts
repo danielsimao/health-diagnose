@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   Patch,
@@ -21,6 +22,12 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: User) {
+    const existingUser = await this.userService.findOne(createUserDto.username);
+
+    if (existingUser) {
+      throw new ForbiddenException();
+    }
+
     const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
     return this.userService.create({
       ...createUserDto,
