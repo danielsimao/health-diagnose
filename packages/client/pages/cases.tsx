@@ -3,10 +3,13 @@ import { useState } from "react";
 import Button from "../components/Button";
 import ConditionsDialog from "../components/cases/ConditionsDialog";
 import ConditionsSection from "../components/cases/ConditionsSection";
+import DiagnosesList from "../components/cases/DiagnosesList";
 import EHRSection from "../components/cases/EHRSection";
+import Notice from "../components/cases/Notice";
 import ProgressBar from "../components/cases/PorgressBar";
 import ReadyDialog from "../components/cases/ReadyDialog";
 import Container from "../components/Container";
+import { Diagnoses } from "../interfaces/condition.interface";
 import { useCases, useUser } from "../lib/hooks";
 
 interface DiagnoseForm {
@@ -25,7 +28,7 @@ export default function Cases() {
 
   const [currentCase, setCurrentCase] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [reviewedCases, setReviewedCases] = useState([]);
+  const [diagnoses, setDiagnoses] = useState<Diagnoses[]>([]);
 
   const numberOfCases = cases?.length;
   const caseNumber = currentCase + 1;
@@ -34,43 +37,18 @@ export default function Cases() {
     return <Container className="relative h-screen bg-gray-100" />;
   }
 
-  if (
-    (isEmpty && !reviewedCases.length) ||
-    isError ||
-    caseNumber > numberOfCases
-  ) {
+  if (isEmpty || isError || caseNumber > numberOfCases) {
     return (
-      <Container className="relative h-screen bg-gray-100">
-        <main className="page-main">
-          <div>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-16 w-16"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-              </svg>
-            </div>
-            <p>There are no more cases. You may comeback later.</p>
-            <p>There are no more cases. You may comeback later.</p>
+      <Container className={"relative bg-gray-100 min-h-screen"}>
+        <main className="page-main overflow-hidden">
+          <div className="py-10">
+            <Notice type={isError ? "error" : "empty"} />
+            <DiagnosesList diagnoses={diagnoses} totalCases={numberOfCases} />
           </div>
         </main>
       </Container>
     );
   }
-
-  // if (caseNumber > numberOfCases) {
-  //   return reviewedCases.map((e) => (
-  //     <EHRSection
-  //       condition={e.label}
-  //       record={e.ehr}
-  //       caseNumber={e.number}
-  //       totalCases={e.numberOf}
-  //     />
-  //   ));
-  // }
 
   // For some reason you cannot use `case`
   const _case = cases[currentCase];
@@ -105,7 +83,7 @@ export default function Cases() {
       body: JSON.stringify(body),
     });
 
-    // setReviewedCases((s) => [...s, { ..._case, label: condition, number:caseNumber, total:numberOfCases }]);
+    setDiagnoses((s) => [...s, { condition, caseNumber, ehr: _case.ehr }]);
 
     handleReady();
 

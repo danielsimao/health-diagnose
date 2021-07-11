@@ -10,7 +10,7 @@ export default function ConditionsList({
   onSelect,
 }: ConditionsListProps) {
   return (
-    <div className="overflow-auto flex-auto bg-gray-50">
+    <div className="overflow-auto flex-auto">
       {Conditions.filter((condition) =>
         `${condition.ICD_10} ${condition.ICD_10_Description}`
           .toLowerCase()
@@ -23,7 +23,7 @@ export default function ConditionsList({
             onSelect(`${condition.ICD_10} ${condition.ICD_10_Description}`)
           }
         >
-          <div className="w-1/4 font-bold">{condition.ICD_10}</div>
+          <div className="w-1/4 font-bold text-center">{condition.ICD_10}</div>
           <div className="w-3/4">{condition.ICD_10_Description}</div>
         </div>
       ))}

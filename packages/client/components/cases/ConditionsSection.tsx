@@ -1,5 +1,4 @@
-import { HTMLAttributes, useEffect, useRef, useState } from "react";
-import { Condition } from "../../interfaces/condition.interface";
+import { HTMLAttributes, useEffect, useState } from "react";
 import Button from "../Button";
 import ConditionInput from "./ConditionInput";
 import ConditionsList from "./ConditionsList";
@@ -20,8 +19,6 @@ export default function ConditionsSection({
   style,
 }: ConditionsSectionProps) {
   const [search, setSearch] = useState(condition || "");
-  const ref = useRef<HTMLDivElement>(null);
-  const ref2 = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSearch(condition || "");

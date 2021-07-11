@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://danielsimao.com/" target="blank"><img src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg" width="320" alt="App Logo" /></a>
+  <a href="http://danielsimao.com/" target="blank"><img src="https://github.com/danielsimao/health-diagnose/blob/main/packages/client/public/static/home.png?raw=true" width="840" alt="App Logo" /></a>
 </p>
 
 ## Description
