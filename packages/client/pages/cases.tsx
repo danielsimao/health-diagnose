@@ -34,7 +34,11 @@ export default function Cases() {
     return <Container className="relative h-screen bg-gray-100" />;
   }
 
-  if ((isEmpty && !reviewedCases.length) || isError) {
+  if (
+    (isEmpty && !reviewedCases.length) ||
+    isError ||
+    caseNumber > numberOfCases
+  ) {
     return (
       <Container className="relative h-screen bg-gray-100">
         <main className="page-main">
