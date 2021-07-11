@@ -1,5 +1,6 @@
 import { serialize, parse } from "cookie";
 import { NextApiResponse, NextApiRequest } from "next";
+
 const TOKEN_NAME = "token";
 
 export const MAX_AGE = 60 * 60 * 8; // 8 hours

@@ -2,8 +2,7 @@ import Iron from "@hapi/iron";
 import { NextApiResponse, NextApiRequest } from "next";
 import { getTokenCookie, MAX_AGE, setTokenCookie } from "./auth-cookies";
 
-const TOKEN_SECRET =
-  "some_not_random_password_that_is_at_least_32_characters" as string;
+const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 
 export async function setLoginSession(
   res: NextApiResponse,
