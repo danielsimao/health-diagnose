@@ -107,7 +107,7 @@ export default function Home() {
               </svg>
             </div>
             <p className="text-base sm:text-lg text-gray-800">
-              Submit your diagnose along with thousands of other professionals
+              Submit your diagnoses along with thousands of other professionals
             </p>
           </div>
           <div className="flex flex-col justify-center items-center gap-4">

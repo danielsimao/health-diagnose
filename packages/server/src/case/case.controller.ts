@@ -24,10 +24,10 @@ export class CaseController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/unreviewed')
+  @Get('/undiagnosed')
   findAllUnreviewed(@Req() req) {
     const user = req.user;
-    return this.caseService.findAllUnreviewed(user.userId);
+    return this.caseService.findAllUndiagnosed(user.userId);
   }
 
   @UseGuards(JwtAuthGuard)

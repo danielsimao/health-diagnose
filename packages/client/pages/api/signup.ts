@@ -14,7 +14,7 @@ export default async function signup(
     const data = await signup.json();
 
     if (!data.username) {
-      return res.status(401).send("Username already exists");
+      return res.status(409).send("Username already exists");
     }
 
     res.status(200).send({ done: true });

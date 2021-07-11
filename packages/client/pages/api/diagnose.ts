@@ -22,6 +22,6 @@ export default async function diagnose(
     res.status(200).json({ done: true });
   } catch (error) {
     console.error(error);
-    res.status(500).end("Authentication token is invalid, please log in");
+    res.status(500).end(error.message);
   }
 }

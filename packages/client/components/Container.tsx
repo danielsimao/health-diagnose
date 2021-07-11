@@ -40,7 +40,7 @@ export default function Container({
             width={40}
             height={40}
             layout="fixed"
-            className="h-8 w-auto sm:h-10"
+            className="h-8 w-auto sm:h-10 cursor-pointer"
             src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
           />
           {user && router.pathname === "/cases" && <UserPopover />}

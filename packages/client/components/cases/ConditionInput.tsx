@@ -20,7 +20,7 @@ export default function ConditionInput({
       />
       <span
         onClick={onClear}
-        className={`absolute right-0 top-0 h-12 w-12 bg-white p-3 ${
+        className={`absolute right-0 top-0 h-12 w-12 bg-white p-3 cursor-pointer ${
           !value ? "hidden" : ""
         }`}
       >

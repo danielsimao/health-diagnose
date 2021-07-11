@@ -7,7 +7,7 @@ export default async function cases(req: NextApiRequest, res: NextApiResponse) {
     let cases = null;
 
     if (session) {
-      const login = await fetch("http://localhost:3000/case/unreviewed", {
+      const login = await fetch("http://localhost:3000/case/undiagnosed", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

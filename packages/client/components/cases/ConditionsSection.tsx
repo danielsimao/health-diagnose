@@ -43,7 +43,12 @@ export default function ConditionsSection({
       </div>
       <ConditionsList onSelect={handleSelect} filter={search} />
       <div className="flex flex-grow-0 items-center p-4 border-t border-gray-200">
-        <Button onClick={onSubmit} className="w-full" variant="primary">
+        <Button
+          disable={!condition}
+          onClick={onSubmit}
+          className="w-full"
+          variant="primary"
+        >
           Submit & Next
         </Button>
       </div>

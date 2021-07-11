@@ -18,7 +18,7 @@ export default function ConditionsList({
       ).map((condition) => (
         <div
           key={condition.ICD_10}
-          className="flex gap-3 items-center p-4 border-b border-gray-200"
+          className="flex gap-3 items-center p-4 border-b border-gray-200 cursor-pointer"
           onClick={() =>
             onSelect(`${condition.ICD_10} ${condition.ICD_10_Description}`)
           }
