@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Button from "./Button";
 import { useRouter } from "next/router";
+import UserPopover from "./UserPopover";
 
 interface ContainerProps {
   children?: React.ReactNode;
@@ -42,18 +43,7 @@ export default function Container({
             className="h-8 w-auto sm:h-10"
             src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
           />
-          {user && (
-            <div className="flex flex-row items-center gap-2">
-              <div className="text-gray-800 border-r border-gray pr-6">
-                Welcome <span className="font-semibold">{user.name}</span>
-              </div>
-              <Link passHref href="/api/logout">
-                <span>
-                  <Button variant="ghost">Log Out</Button>
-                </span>
-              </Link>
-            </div>
-          )}
+          {user && router.pathname === "/cases" && <UserPopover />}
           {router.pathname === "/" && (
             <div className="flex flex-row gap-2">
               <Button onClick={onSignIn} variant="ghost">
