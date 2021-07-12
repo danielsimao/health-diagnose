@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Diagnoses, DiagnosesDocument } from '../schemas/diagnoses.schema';
 
 @Injectable()
@@ -10,6 +11,7 @@ export class DiagnoseService {
     private diagnosesModel: Model<DiagnosesDocument>,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   async create(createDiagnoseDto: Diagnoses): Promise<Diagnoses> {
     return new this.diagnosesModel(createDiagnoseDto).save();
   }
