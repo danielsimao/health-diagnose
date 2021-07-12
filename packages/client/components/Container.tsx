@@ -18,7 +18,7 @@ interface ContainerProps {
 export default function Container({
   className,
   children,
-  title = "Health Review",
+  title = "Health Diagnose",
   description,
   onSignIn,
   onSignUp,

@@ -15,7 +15,7 @@ export default function Login({
     e.preventDefault();
 
     const body = {
-      username: e.currentTarget.username.value,
+      email: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
     };
 

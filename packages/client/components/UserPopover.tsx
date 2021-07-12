@@ -61,7 +61,7 @@ export default function UserPopover() {
                       </p>
                     </div>
                   </div>
-                  <Link href="/api/logout">
+                  <Link passHref href="/api/logout">
                     <div className="flex flex-row gap-2 p-4 cursor-pointer">
                       <div className="flex items-center justify-center flex-shrink-0 text-white">
                         <svg

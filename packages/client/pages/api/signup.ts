@@ -13,8 +13,8 @@ export default async function signup(
 
     const data = await signup.json();
 
-    if (!data.username) {
-      return res.status(409).send("Username already exists");
+    if (!data.email) {
+      return res.status(409).send("Email already in use");
     }
 
     res.status(200).send({ done: true });
