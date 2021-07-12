@@ -12,7 +12,7 @@ export default function EHRSection({
   return (
     <div
       id="ehr"
-      className="flex-1 flex flex-col bg-white shadow overflow-hidden rounded-lg case-record"
+      className="flex flex-col bg-white shadow overflow-hidden rounded-lg case-record md:flex-1"
     >
       <div className="px-4 py-5 sm:px-6">
         <h2 className="text-lg leading-6 font-bold text-gray-900">

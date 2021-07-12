@@ -1,7 +1,4 @@
-import Image from "next/image";
 import { useState } from "react";
-import Button from "../components/Button";
-import ConditionsDialog from "../components/cases/ConditionsDialog";
 import ConditionsSection from "../components/cases/ConditionsSection";
 import DiagnosesList from "../components/cases/DiagnosesList";
 import EHRSection from "../components/cases/EHRSection";
@@ -27,7 +24,6 @@ export default function Cases() {
   });
 
   const [currentCase, setCurrentCase] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
   const [diagnoses, setDiagnoses] = useState<Diagnoses[]>([]);
 
   const numberOfCases = cases?.length;
@@ -57,9 +53,8 @@ export default function Cases() {
     setForm(() => ({ condition: undefined, startTime: new Date().getTime() }));
   }
 
-  function handleSelect(condionOption: string) {
+  function handleSelect(condionOption?: string) {
     setForm((s) => ({ ...s, condition: condionOption }));
-    setIsOpen(false);
   }
 
   function handleSubmit() {
@@ -90,43 +85,6 @@ export default function Cases() {
     setCurrentCase((s) => s + 1);
   }
 
-  function handleClear() {
-    setForm((s) => ({ ...s, condition: undefined }));
-  }
-
-  function handleClose() {
-    setIsOpen(false);
-  }
-
-  function handleOpen() {
-    setIsOpen(true);
-  }
-
-  const mobileFeatures = (
-    <>
-      <ConditionsDialog
-        condition={form.condition}
-        isOpen={isOpen}
-        onClose={handleClose}
-        onClear={handleClear}
-        onSelect={handleSelect}
-      />
-      <div className="grid grid-cols-3 gap-4 left-0 bottom-0 w-screen bg-white border-t border-gray-200 md:hidden">
-        <Button onClick={handleOpen} className="col-span-2" variant="primary">
-          Diagnose
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          disable={!form.condition}
-          className="col-span-1 "
-          variant="white"
-        >
-          Next
-        </Button>
-      </div>
-    </>
-  );
-
   return (
     <Container
       className={`relative bg-gray-100 min-h-screen ${
@@ -144,8 +102,8 @@ export default function Cases() {
         numberOfCases={numberOfCases}
       />
 
-      <main className="page-main overflow-hidden">
-        <div className="flex flex-row gap-5 text-left md:py-10">
+      <main style={{ paddingBottom: 0 }} className="page-main overflow-hidden">
+        <div className="flex flex-col md:flex-row gap-5 text-left md:py-10">
           <EHRSection
             condition={form.condition}
             record={_case.ehr}
@@ -156,11 +114,9 @@ export default function Cases() {
             condition={form.condition}
             onSelect={handleSelect}
             onSubmit={handleSubmit}
-            onClear={handleClear}
           />
         </div>
       </main>
-      {mobileFeatures}
     </Container>
   );
 }

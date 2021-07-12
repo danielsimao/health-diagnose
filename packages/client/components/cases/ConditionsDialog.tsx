@@ -1,7 +1,5 @@
-import { ArrowLeftIcon, XIcon } from "@heroicons/react/solid";
-import { useEffect, useState } from "react";
-import { Condition } from "../../interfaces/condition.interface";
-import Button from "../Button";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
+import { ChangeEvent } from "react";
 import Dialog from "../Dialog";
 import ConditionInput from "./ConditionInput";
 import ConditionsList from "./ConditionsList";
@@ -11,27 +9,18 @@ interface ConditionsDialogProps {
   onClose: () => void;
   onSelect: (condition: string) => void;
   onClear: () => void;
-  condition?: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  search: string;
 }
 
 export default function ConditionsDialog({
-  isOpen,
   onClose,
   onSelect,
   onClear,
-  condition,
+  search,
+  onChange,
+  isOpen,
 }: ConditionsDialogProps) {
-  const [search, setSearch] = useState(condition || "");
-
-  useEffect(() => {
-    setSearch(condition || "");
-  }, [condition]);
-
-  function handleSelect(option: string) {
-    onSelect(option);
-    setSearch(option);
-  }
-
   return (
     <Dialog fullscreen isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col h-full w-full">
@@ -44,12 +33,12 @@ export default function ConditionsDialog({
             <ArrowLeftIcon />
           </button>
           <ConditionInput
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={onChange}
             value={search}
             onClear={onClear}
           />
         </div>
-        <ConditionsList onSelect={handleSelect} filter={search} />
+        <ConditionsList onSelect={onSelect} filter={search} />
       </div>
     </Dialog>
   );
