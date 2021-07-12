@@ -35,7 +35,12 @@ export function useUser({
 }
 
 export function useCases() {
-  const { data, error } = useSWR("/api/cases", Fetcher);
+  const { data, error } = useSWR("/api/cases", Fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenOffline: false,
+    refreshWhenHidden: false,
+  });
 
   return {
     cases: data,
