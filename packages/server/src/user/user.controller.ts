@@ -22,7 +22,7 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: User) {
-    const existingUser = await this.userService.findOne(createUserDto.username);
+    const existingUser = await this.userService.findOne(createUserDto.email);
 
     if (existingUser) {
       throw new ForbiddenException();
@@ -39,18 +39,8 @@ export class UserController {
   @Get()
   async find(@Req() req: Request) {
     const user = <User>req.user;
-    const userData = await this.userService.findOne(user.username);
+    const userData = await this.userService.findOne(user.email);
     userData.password = undefined;
     return userData;
-  }
-
-  @Patch(':username')
-  update(@Param('username') username: string, @Body() updateUserDto: User) {
-    return this.userService.update(username, updateUserDto);
-  }
-
-  @Delete(':username')
-  remove(@Param('username') username: string) {
-    return this.userService.remove(username);
   }
 }

@@ -16,18 +16,15 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.userModel.findOne({ username });
+  async findOne(email: string): Promise<User | undefined> {
+    return this.userModel.findOne({ email });
   }
 
-  async update(username: string, updateUserDto: User) {
-    return this.userModel.updateOne(
-      { username },
-      { $set: { ...updateUserDto } },
-    );
+  async update(email: string, updateUserDto: User) {
+    return this.userModel.updateOne({ email }, { $set: { ...updateUserDto } });
   }
 
-  async remove(username: string) {
-    return this.userModel.deleteOne({ username });
+  async remove(email: string) {
+    return this.userModel.deleteOne({ email });
   }
 }
