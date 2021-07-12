@@ -10,9 +10,7 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(
-      `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@cluster0.3bb5f.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
-    ),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     UserModule,
     CaseModule,
     AuthModule,

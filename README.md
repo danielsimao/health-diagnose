@@ -6,9 +6,11 @@
 
 Monorepo CRUD Application.
 
-Client: TailwindCSS, Next.js
+**Client:** TailwindCSS, Next.js
 
-Server: Nest.js
+**Server:** Nest.js
+
+**NOTICE:** Before running the app you may need to set .env files, both client and server. Please follow the .env.examples provided.
 
 ## Installation
 
