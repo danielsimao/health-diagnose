@@ -2,11 +2,9 @@ import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { Fragment } from "react";
-import { useUser } from "../lib/hooks";
 
-export default function UserPopover() {
-  const user = useUser();
-  const userInitialChar: string = user.name[0];
+export default function UserPopover({ user }: { user: any }) {
+  const userInitialChar: string = user?.name[0];
 
   return (
     <Popover className="relative">

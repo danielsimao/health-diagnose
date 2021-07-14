@@ -23,7 +23,7 @@ export default function Container({
   onSignIn,
   onSignUp,
 }: ContainerProps) {
-  const user = useUser();
+  const user = useUser({ redirectTo: "/" });
   const router = useRouter();
 
   return (
@@ -43,7 +43,7 @@ export default function Container({
             className="h-8 w-auto sm:h-10 cursor-pointer"
             src="https://tailwindui.com/img/logos/workflow-mark-blue-600.svg"
           />
-          {user && router.pathname === "/cases" && <UserPopover />}
+          {user && router.pathname === "/cases" && <UserPopover user={user} />}
           {router.pathname === "/" && (
             <div className="flex flex-row gap-2">
               <Button onClick={onSignIn} variant="ghost">
